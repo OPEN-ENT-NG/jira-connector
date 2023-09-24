@@ -1,0 +1,4 @@
+{
+	"main" : "fr.openent.jiraconnector.Jira",
+	"multi-threaded": false
+}

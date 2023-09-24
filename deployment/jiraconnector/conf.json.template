@@ -1,0 +1,10 @@
+    {
+      "name": "fr.openent~jira-connector~0.1-SNAPSHOT",
+      "config": {
+        "mode": "${mode}",
+        "address": "${address}",
+        "jiraSamlResponse": {
+
+        }
+      }
+    }
