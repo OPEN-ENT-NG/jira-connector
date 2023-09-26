@@ -96,7 +96,3 @@ Exemple pour un administrateur région:
    }
 ]
 </pre>
-
-
-
-
