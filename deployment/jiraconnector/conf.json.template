@@ -1,10 +1,19 @@
-    {
-      "name": "fr.openent~jira-connector~0.1-SNAPSHOT",
-      "config": {
-        "mode": "${mode}",
-        "address": "${address}",
-        "jiraSamlResponse": {
-
-        }
-      }
-    }
+{
+  "name": "fr.openent~jira-connector~0.1-SNAPSHOT",
+  "config": {
+    "main" : "fr.openent.jira-connector.Jira",
+    "port" : 8206,
+    "app-name" : "Jira",
+    "app-address" : "/jira",
+    "address": "${jiraConnectorEbAddress}",
+    "host": "${host}",
+    "ssl" : $ssl,
+    "auto-redeploy": false,
+    "userbook-host": "${host}",
+    "integration-mode" : "HTTP",
+    "app-registry.port" : 8012,
+    "mode" : "${mode}",
+    "jira-groups": ${jiraSsoGroups},
+    "uai-admin": ${jiraUaiAdmin}
+  }
+}
