@@ -1,65 +1,102 @@
-# module-starting-pack
+# À propos de l'application Jira-Connector
 
-Starting pack for a verticle with AngularJS.
-In this example we take a todolistapp as an example.
+* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Région Nouvelle Aquitaine
+* Propriétaire(s) : CGI
+* Mainteneur(s) : CGI
+* Financeur(s) : Région Nouvelle Aquitaine
+* Description : Application permettant de la connexion à Jira en SSO depuis l'ENT.
 
-This project includes :
-- Java Vertx features (Promise/Future)
-- Some example using HttpClient (WebClient)
-- MVVM Architecture (Front-end part)
-- Package with proper deps to work with Typescript and its configuration
-- Unit Test
-- CI for gitlab and github test
+## Configuration du module magneto dans le projet OPEN ENT
 
+Dans le fichier 'ent-core.json.template' du projet OPEN ENT :
 
-What must be updated :
-- `entcore` (from package.json) current: `4.7.2`
-- `entCoreVersion` (from gradle.properties) current : `4.10.2`
-
-What must be changed (if you wish) :
-- module name we use `module-starting-pack` as name folder
-- `Todoapp` java main class
-- Some file(s) named with "todolist"
-- (Optional) some HelperClass are implemented to explain some vertx features must be removed if you use it as a true project
-- Deployment file (/deployment/${yourApp}/conf.json.template) :
 <pre>
-{
-      "name": "fr.${packageName}~${yourApp}~0.1-SNAPSHOT",
+    {
+      "name": "fr.openent~jira-connector~0.1-SNAPSHOT",
       "config": {
-        "main" : "fr.${packageName}~${yourApp}",
-        "port" : xxxx,
-        "sql" : true,
-        "mongodb" : false,
-        "neo4j" : true,
-        "app-name" : ${yourApp},
-        "app-address" : `/${yourApp}`,
-        "app-icon" : "${yourApp}-large",
-        "host": "http://localhost:8090",
-        "ssl" : false,
+        "main" : "fr.openent.jira-connector.Jira",
+        "port" : 8206,
+        "app-name" : "Jira",
+    	"app-address" : "/jira",
+        "address": "${jiraConnectorEbAddress}",
+        "host": "${host}",
+        "ssl" : $ssl,
         "auto-redeploy": false,
-        "userbook-host": "http://localhost:8090",
+        "userbook-host": "${host}",
         "integration-mode" : "HTTP",
-        "mode" : "dev"
+        "app-registry.port" : 8012,
+        "mode" : "${mode}",
+        "jira-groups": ${jiraSsoGroups},
+        "uai-admin": ${jiraUaiAdmin}
       }
-}
+    }
 </pre>
-- gradle.properties :
+
+Dans votre springboard, vous devez inclure des variables d'environnement :
+
+| **conf.properties**          | **Utilisation**                                                                         | **Exemple**                                                                                                                              |
+|------------------------------|-----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| "${jiraConnectorEbAddress}"  | Addresse de l'event bus permettant la connexion sso à Jira                              | fr.openent.ssojira                                                                                                                       |
+| "${jira-groups}"   | Objet contenant les différents groupes Jira et leur correspondance                      | '{"region": "jira-region-ent", "admin": "jira-administrateur-ent","personnel": "jira-personnel-ent","users": "jira-software-users-ent"}' |
+| "${uai-admin}"     | UAI de l'établissement région de la plateforme pour désigner les administrateurs région | 9999999K                                                                                                                                 |
+
+Associer une route d'entrée à la configuration du module proxy intégré (`"name": "com.wse~http-proxy~1.0.0"`) :
 <pre>
-# E.g. your domain name
-modowner=fr.${packageName}
-modname=${yourApp}
+      {
+        "location": "/jira",
+        "proxy_pass": "http://localhost:8206"
+      }
 </pre>
-- mod.json :
+
+
+## Documentation
+Magneto est un outil de création permettant aux utilisateurs de créer et d’échanger des tableaux.
+Il contient des aimants, chaque aimant ayant son propre type (texte, image, lien etc..).
+
+# Méthode d'appel de l'event bus
+Pour appeler l'event bus, il faut d'abord fournir un JsonObject contenant 3 propriétés :
+
+| **Propriété**  | **Description**                                                | **Exemple**        |
+|----------------|----------------------------------------------------------------|--------------------|
+| "userId"       | Identifiant de l'utilisateur pour qui on souhaite se connecter | fr.openent.ssojira |
+| "host"         | Host de la plateforme                                          | ng2.support-ent.fr |
+| "serviceProviderEntityId" | Plateforme Jira utilisée                                       | https://jira-crna-test.support-ent.fr           |
+
+Il suffit ensuite d'appeler l'event bus à l'adresse fourni en variable de configuration de ce module avec la clé jiraConnectorEbAddress. 
+
+# Réponse de l'appel event bus
+
+Pour la réponse, elle se fait sous la forme d'un JsonArray que l'on peut découpé en 2 :
+* Les informations sur l'utilisateur avec son login, son mail et son nom d'affichage.
+* Les groupes (structures, academies et groupe Jira saisi en conf au préalable) dans lesquels on va l'insérer sur Jira.
+
+Exemple pour un administrateur région:
 <pre>
-{
-	"main" : "fr.${packageName}.${yourApp}.${YourApp}",
-	"port" : xxxx,
-	"app-name" : "${YourApp}",
-	"app-address" : "/${yourApp}",
-	"app-icon" : "${yourApp}-large",
-	"app-displayName" : "${YourApp}",
-	"mode": "dev",
-	"entcore.port" : 8090,
-	"auto-redeploy": false
-}
+[
+   {
+      "login":"najwa.kedou"
+   },
+   {
+      "displayName":"Najwa KEDOU"
+   },
+   {
+      "email":"najwa.kedou-1@ng1.support-ent.fr"
+   },
+   {
+      "group":"jira-software-users-ent"
+   },
+   {
+      "group":"0771517F - Etablissement Formation 55452"
+   },
+   {
+      "group":"Académie de CRETEIL"
+   },
+   {
+      "group":"jira-region-ent"
+   }
+]
 </pre>
+
+
+
+
