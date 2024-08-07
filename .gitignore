@@ -32,3 +32,6 @@ module-starting-pack/src/main/resources/public/font
 /package-lock.json
 /src/main/resources/public/css/
 /yarn.lock
+.env
+target
+dependency-reduced-pom.xml
