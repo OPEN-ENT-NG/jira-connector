@@ -1,5 +1,5 @@
 {
-  "name": "fr.openent~jira-connector~2.0-b2school-SNAPSHOT",
+  "name": "fr.openent~jira-connector~${jiraConnectorVersion}",
   "config": {
     "main" : "fr.openent.jira-connector.Jira",
     "port" : 8206,
