@@ -9,10 +9,21 @@ public class JiraConnectorConfig {
     private final String jiraUaiAdmin;
     private final JiraSsoGroups jiraSsoGroups;
 
+    private final String scimUrl;
+    private final String scimToken;
+    private final String adminJiraApiUrl;
+    private final String adminJiraApiAuthorization;
+    private final String adminJiraDirectoryId;
+
     public JiraConnectorConfig(JsonObject config) {
         this.ebAddress = config.getString(Field.ADDRESS, "fr.openent.ssojira");
         this.jiraSsoGroups = new JiraSsoGroups(config.getJsonObject(Field.JIRA_SSO_GROUPS, new JsonObject()));
         this.jiraUaiAdmin = config.getString(Field.JIRA_UAI_ADMIN, "");
+        this.scimUrl = config.getString(Field.SCIM_URL, "");
+        this.scimToken = config.getString(Field.SCIM_TOKEN, "");
+        this.adminJiraApiUrl = config.getString(Field.ADMIN_JIRA_API_URL, "");
+        this.adminJiraApiAuthorization = config.getString(Field.ADMIN_JIRA_API_AUTHORIZATION, "");
+        this.adminJiraDirectoryId = config.getString(Field.ADMIN_JIRA_DIRECTORY_ID, "");
     }
 
     public String ebAddress() {
@@ -27,6 +38,23 @@ public class JiraConnectorConfig {
         return jiraUaiAdmin;
     }
 
+    public String getScimUrl() {
+        return scimUrl;
+    }
+
+    public String getScimToken() {
+        return scimToken;
+    }
+
+    public String getAdminJiraApiUrl() {
+        return adminJiraApiUrl + "/"+ adminJiraDirectoryId;
+    }
+
+    public String getAdminJiraApiAuthorization() {
+        return adminJiraApiAuthorization;
+    }
+
+  
     public static class JiraSsoGroups {
 
         private String region;
