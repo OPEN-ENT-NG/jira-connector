@@ -18,6 +18,11 @@
     "entcore.port" : 8009,
     "jira-groups" : {{ jiraSsoGroups | default('{"region":"jira-region-ent", "admin":"jira-administrateur-ent","personnel":"jira-personnel-ent","users":"jira-software-users-ent"}') }},
     "uai-admin" : "{{ jiraUaiAdmin | default('9999991F') }}",
-    "address" : "fr.openent.ssojira"
+    "address" : "fr.openent.ssojira",
+    "scim-url" : "{{ jiraScimUrl | default('') }}",
+    "scim-token" : "{{ jiraScimToken | default('') }}",
+    "admin-jira-api-authorization": "{{ jiraAdminApiAuthorization | default('') }}",
+    "admin-jira-api-url":"{{ jiraAdminApiUrl | default('') }}",
+    "admin-jira-directory-id":"{{ jiraAdminDirectoryId | default('') }}"
   }
 }
