@@ -2,6 +2,10 @@
   "name": "fr.openent~jira-connector",
   "config": {
     "main" : "fr.openent.jira-connector.Jira",
+    "probes": [
+      "org.entcore.common.http.health.Neo4jProbe",
+      "org.entcore.common.http.health.MongoProbe"
+    ],
     "port" : 8206,
     "csrf-token": {{ csrfToken | default('true') }},
     "app-name" : "jira",
