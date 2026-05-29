@@ -46,13 +46,6 @@
     </dependency>
     <dependency>
       <groupId>org.entcore</groupId>
-      <artifactId>common</artifactId>
-      <version>${entCoreVersion}</version>
-      <classifier>fat</classifier>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.entcore</groupId>
       <artifactId>tests</artifactId>
       <version>${entCoreVersion}</version>
       <scope>test</scope>
